@@ -4,8 +4,10 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaWhatsapp, FaInstagram } from "react-icons/fa";
+import { useLead } from "@/context/LeadContext";
 
 export function Footer() {
+  const { openModal } = useLead();
   const whatsappPrincipal = "https://wa.me/554198019902?text=Ol%C3%A1%2C+vi+o+site+e+gostaria+de+solicitar+um+or%C3%A7amento.";
   const whatsappSecundario = "https://wa.me/5541992675409?text=Ol%C3%A1%2C+vi+o+site+e+gostaria+de+solicitar+um+or%C3%A7amento.";
 
@@ -34,14 +36,20 @@ export function Footer() {
           <div className="flex flex-col items-center md:items-start gap-8">
             <h4 className="text-white/30 text-[9px] font-black uppercase tracking-[0.2em] italic">Atendimento WhatsApp</h4>
             <div className="flex flex-col gap-4">
-              <a href={whatsappPrincipal} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/50 hover:text-accent transition-all group">
+              <button 
+                onClick={() => openModal(whatsappPrincipal)}
+                className="flex items-center gap-3 text-white/50 hover:text-accent transition-all group cursor-pointer"
+              >
                 <FaWhatsapp className="w-5 h-5 text-accent" />
                 <span className="text-sm font-black italic tracking-tighter tabular-nums">(41) 9801-9902</span>
-              </a>
-              <a href={whatsappSecundario} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/50 hover:text-accent transition-all group">
+              </button>
+              <button 
+                onClick={() => openModal(whatsappSecundario)}
+                className="flex items-center gap-3 text-white/50 hover:text-accent transition-all group cursor-pointer"
+              >
                 <FaWhatsapp className="w-5 h-5 opacity-50 group-hover:opacity-100" />
                 <span className="text-sm font-black italic tracking-tighter tabular-nums">(41) 99267-5409</span>
-              </a>
+              </button>
             </div>
           </div>
 
