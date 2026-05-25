@@ -32,36 +32,36 @@ const portfolioCases = [
 export function BeforeAfterSlider() {
   const [activeCase, setActiveCase] = useState(0);
   const [sliderPosition, setSliderPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleMove = (e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) => {
+  const handleMove = (clientX: number) => {
     if (!containerRef.current) return;
 
     const rect = containerRef.current.getBoundingClientRect();
-    const x = "touches" in e ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
-    const position = ((x - rect.left) / rect.width) * 100;
+    const x = clientX - rect.left;
+    const position = (x / rect.width) * 100;
 
     if (position >= 0 && position <= 100) {
       setSliderPosition(position);
     }
   };
 
-  const onMouseDown = () => {
-    window.addEventListener("mousemove", handleMove);
-    const onMouseUp = () => {
-      window.removeEventListener("mousemove", handleMove);
-      window.removeEventListener("mouseup", onMouseUp);
-    };
-    window.addEventListener("mouseup", onMouseUp);
+  const onPointerDown = (e: React.PointerEvent) => {
+    setIsDragging(true);
+    handleMove(e.clientX);
+    e.currentTarget.setPointerCapture(e.pointerId);
   };
 
-  const onTouchStart = () => {
-    window.addEventListener("touchmove", handleMove);
-    const onTouchEnd = () => {
-      window.removeEventListener("touchmove", handleMove);
-      window.removeEventListener("touchend", onTouchEnd);
-    };
-    window.addEventListener("touchend", onTouchEnd);
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (isDragging) {
+      handleMove(e.clientX);
+    }
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    setIsDragging(false);
+    e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
   const nextCase = () => setActiveCase((prev) => (prev + 1) % portfolioCases.length);
@@ -114,9 +114,11 @@ export function BeforeAfterSlider() {
             >
               <div 
                 ref={containerRef}
-                className="absolute inset-0"
-                onMouseDown={onMouseDown}
-                onTouchStart={onTouchStart}
+                className="absolute inset-0 touch-none"
+                onPointerDown={onPointerDown}
+                onPointerMove={onPointerMove}
+                onPointerUp={onPointerUp}
+                onPointerCancel={onPointerUp}
               >
                 {/* After Image (Background) */}
                 <div className="absolute inset-0 bg-[#0A0A0A] flex items-center justify-center">
@@ -128,6 +130,7 @@ export function BeforeAfterSlider() {
                     className="object-cover"
                     priority
                     unoptimized
+                    draggable={false}
                   />
                   <div className="absolute top-4 md:top-8 right-4 md:right-8 z-20">
                     <span className="bg-accent text-primary text-sm md:text-2xl font-black px-4 md:px-6 py-1 md:py-2 shadow-xl rounded-full italic uppercase">DEPOIS</span>
@@ -147,6 +150,7 @@ export function BeforeAfterSlider() {
                     sizes="(max-width: 768px) 100vw, 1200px"
                     className="object-cover brightness-50 md:brightness-75"
                     unoptimized
+                    draggable={false}
                   />
                   <div className="absolute top-4 md:top-8 left-4 md:left-8 z-20">
                     <span className="bg-white text-primary text-sm md:text-2xl font-black px-4 md:px-6 py-1 md:py-2 shadow-xl rounded-full italic uppercase">ANTES</span>
