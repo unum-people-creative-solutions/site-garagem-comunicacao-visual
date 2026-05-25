@@ -11,16 +11,16 @@ const Spotlight = ({ position, delay = 0 }: { position: "left" | "right"; delay?
   <motion.div
     data-testid="hero-spotlight"
     initial={{ 
-      rotate: position === "left" ? -30 : 30,
+      rotate: position === "left" ? 60 : -60,
       opacity: 0,
     }}
     animate={{ 
-      rotate: position === "left" ? [-30, -95, -30] : [30, 95, 30],
-      opacity: [0.5, 0.9, 0.5],
+      rotate: position === "left" ? [60, -5, 60] : [-60, 5, -60],
+      opacity: [0.4, 0.9, 0.4],
     }}
     transition={{ 
       rotate: {
-        duration: 12 + delay,
+        duration: position === "right" ? (12 + delay) / 1.25 : (12 + delay),
         repeat: Infinity,
         ease: "easeInOut",
       },
@@ -31,23 +31,23 @@ const Spotlight = ({ position, delay = 0 }: { position: "left" | "right"; delay?
       }
     }}
     style={{ 
-      originX: position === "left" ? "left" : "right",
-      originY: "bottom",
+      originX: "50%",
+      originY: "100%",
     }}
-    className={`absolute -bottom-20 ${position === "left" ? "left-0" : "right-0"} w-[150vw] h-[300vh] pointer-events-none z-[1] mix-blend-screen`}
+    className={`absolute -bottom-10 ${position === "left" ? "left-0 -translate-x-1/2" : "right-0 translate-x-1/2"} w-[150vmax] h-[150vmax] pointer-events-none z-[1] mix-blend-screen`}
   >
     <div 
       style={{
         background: `conic-gradient(
-          from ${position === "left" ? "80deg" : "-100deg"} 
-          at ${position === "left" ? "0% 100%" : "100% 100%"}, 
+          from -5deg 
+          at 50% 100%, 
           transparent 0deg, 
-          rgba(255, 215, 0, 0.1) 4deg, 
-          rgba(255, 255, 255, 0.8) 10deg, 
-          rgba(255, 215, 0, 0.1) 16deg, 
-          transparent 20deg
+          rgba(255, 215, 0, 0.1) 2deg, 
+          rgba(255, 255, 255, 0.9) 5deg, 
+          rgba(255, 215, 0, 0.1) 8deg, 
+          transparent 10deg
         )`,
-        filter: "blur(30px)",
+        filter: "blur(20px)",
       }}
       className="w-full h-full"
     />
