@@ -19,3 +19,10 @@
 - [x] Garantir transição fluida entre as seções.
 - **Gate**: Página inicial com fluxo visual completo (Hero -> Proof).
 
+## 4. Skywalker Spotlight Effect
+- [x] Criar sub-componente ou elemento CSS para o feixe de luz.
+- [x] Configurar animações independentes (sweep) com Framer Motion.
+- [x] Ajustar opacidade, blur e mix-blend-mode para integração estética.
+- **Gate**: Holofotes funcionais e harmonizados com a Hero.
+
+

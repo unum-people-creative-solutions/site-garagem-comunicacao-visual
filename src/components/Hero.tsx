@@ -7,6 +7,53 @@ import { Button } from "./ui/Button";
 import { useLead } from "@/context/LeadContext";
 import { FaChevronRight } from "react-icons/fa";
 
+const Spotlight = ({ position, delay = 0 }: { position: "left" | "right"; delay?: number }) => (
+  <motion.div
+    data-testid="hero-spotlight"
+    initial={{ 
+      rotate: position === "left" ? -30 : 30,
+      opacity: 0,
+    }}
+    animate={{ 
+      rotate: position === "left" ? [-30, -95, -30] : [30, 95, 30],
+      opacity: [0.5, 0.9, 0.5],
+    }}
+    transition={{ 
+      rotate: {
+        duration: 12 + delay,
+        repeat: Infinity,
+        ease: "easeInOut",
+      },
+      opacity: {
+        duration: 5,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }
+    }}
+    style={{ 
+      originX: position === "left" ? "left" : "right",
+      originY: "bottom",
+    }}
+    className={`absolute -bottom-20 ${position === "left" ? "left-0" : "right-0"} w-[150vw] h-[300vh] pointer-events-none z-[1] mix-blend-screen`}
+  >
+    <div 
+      style={{
+        background: `conic-gradient(
+          from ${position === "left" ? "80deg" : "-100deg"} 
+          at ${position === "left" ? "0% 100%" : "100% 100%"}, 
+          transparent 0deg, 
+          rgba(255, 215, 0, 0.1) 4deg, 
+          rgba(255, 255, 255, 0.8) 10deg, 
+          rgba(255, 215, 0, 0.1) 16deg, 
+          transparent 20deg
+        )`,
+        filter: "blur(30px)",
+      }}
+      className="w-full h-full"
+    />
+  </motion.div>
+);
+
 export function Hero() {
   const { openModal } = useLead();
   const whatsappUrl = "https://wa.me/554198019902?text=Ol%C3%A1%2C+vi+o+site+e+gostaria+de+solicitar+um+or%C3%A7amento+para+meu+neg%C3%B3cio.";
@@ -52,6 +99,10 @@ export function Hero() {
 
       {/* Noise Texture Overlay */}
       <div className="absolute inset-0 bg-noise pointer-events-none z-0" />
+
+      {/* Skywalker Spotlights */}
+      <Spotlight position="left" delay={2} />
+      <Spotlight position="right" delay={5} />
 
       {/* Dynamic Ambient Glows */}
       <motion.div
