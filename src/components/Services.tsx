@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaLayerGroup, FaTruck, FaPrint, FaFlag, FaImage, FaIdCard, FaStore, FaStickyNote } from "react-icons/fa";
@@ -66,6 +66,17 @@ const services = [
 
 export function Services() {
   const [activeService, setActiveService] = useState<number | null>(0);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkIsDesktop = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+    
+    checkIsDesktop();
+    window.addEventListener('resize', checkIsDesktop);
+    return () => window.removeEventListener('resize', checkIsDesktop);
+  }, []);
 
   return (
     <section id="servicos" className="py-24 md:py-32 bg-[#050505] relative overflow-hidden">
@@ -140,29 +151,28 @@ export function Services() {
                   </h3>
                   
                   <AnimatePresence>
-                    {(isActive || true) && (
-                      <motion.div
-                        initial={false}
-                        animate={{ 
-                          height: (isActive || window?.innerWidth >= 768) ? "auto" : 0,
-                          opacity: (isActive || window?.innerWidth >= 768) ? 1 : 0 
-                        }}
-                        className="overflow-hidden"
-                      >
-                        <p className="text-sm md:text-base text-zinc-100 mb-6 md:mb-8 leading-relaxed font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                          {service.description}
-                        </p>
+                    <motion.div
+                      initial={false}
+                      animate={{ 
+                        height: (isActive || isDesktop) ? "auto" : 0,
+                        opacity: (isActive || isDesktop) ? 1 : 0 
+                      }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                      className="overflow-hidden"
+                    >
+                      <p className="text-sm md:text-base text-zinc-100 mb-6 md:mb-8 leading-relaxed font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                        {service.description}
+                      </p>
 
-                        <ul className="space-y-2 md:space-y-3 pb-2 md:pb-0">
-                          {service.details.map((detail, idx) => (
-                            <li key={idx} className="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-white/70">
-                              <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-                              {detail}
-                            </li>
-                          ))}
-                        </ul>
-                      </motion.div>
-                    )}
+                      <ul className="space-y-2 md:space-y-3 pb-2 md:pb-0">
+                        {service.details.map((detail, idx) => (
+                          <li key={idx} className="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-white/70">
+                            <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+                            {detail}
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
                   </AnimatePresence>
                 </div>
 
