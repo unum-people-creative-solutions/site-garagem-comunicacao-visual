@@ -115,10 +115,20 @@ export function BeforeAfterSlider() {
               <div 
                 ref={containerRef}
                 className="absolute inset-0 touch-none"
-                onPointerDown={onPointerDown}
+                data-testid="slider-container"
+                onPointerDown={(e) => {
+                  document.body.classList.add('is-dragging');
+                  onPointerDown(e);
+                }}
                 onPointerMove={onPointerMove}
-                onPointerUp={onPointerUp}
-                onPointerCancel={onPointerUp}
+                onPointerUp={(e) => {
+                  document.body.classList.remove('is-dragging');
+                  onPointerUp(e);
+                }}
+                onPointerCancel={(e) => {
+                  document.body.classList.remove('is-dragging');
+                  onPointerUp(e);
+                }}
               >
                 {/* After Image (Background) */}
                 <div className="absolute inset-0 bg-[#0A0A0A] flex items-center justify-center">

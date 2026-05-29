@@ -29,6 +29,8 @@ A Fase 5 exige a separação rígida de responsabilidades:
 - **Handoff**: "Auditoria concluída. Task marcada como DONE."
 
 ## 🛠️ Últimas Alterações e Decisões
+- **Performance & Aceleração de GPU**: O Hero agora desativa animações pesadas do Framer Motion em hardwares mais fracos através do hook `usePerformanceTier` (Graceful Degradation em 3 Tiers). Animações de loop infinito foram migradas para o `globals.css` nativo forçando renderização via GPU (`will-change: transform, opacity`).
+- **Scroll Lock (UX)**: O `BeforeAfterSlider` agora impede a rolagem da página inteira (scroll-jank) enquanto é manipulado ativando `touch-none` e `overflow: hidden` dinâmico no `body`.
 - **UI Fix (Footer)**: O layout do rodapé foi refatorado para centralizar os créditos de desenvolvimento e o copyright. Essa alteração evita que o botão flutuante do WhatsApp oculte o texto em telas desktop e mobile, seguindo o padrão estabelecido no `site-psicologa-andrielly`.
 - **Branding**: Padronização dos créditos do desenvolvedor seguindo o estilo minimalista do `site-psicologa-andrielly`. O efeito visual foi sincronizado para que todo o bloco de texto ("Desenvolvido por" e "Unum People Creative Solutions") acenda simultaneamente em dourado (`accent`) no hover, partindo de um estado inicial uniforme e discreto (`white/20`).
 - **Social Media**: Adicionado segundo perfil do Instagram (`@garagemcomunicacaovisuall`) ao rodapé do site.
