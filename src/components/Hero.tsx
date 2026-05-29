@@ -6,56 +6,48 @@ import { motion, Variants } from "framer-motion";
 import { Button } from "./ui/Button";
 import { useLead } from "@/context/LeadContext";
 import { FaChevronRight } from "react-icons/fa";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 
-const Spotlight = ({ position, delay = 0 }: { position: "left" | "right"; delay?: number }) => (
-  <motion.div
-    data-testid="hero-spotlight"
-    initial={{ 
-      rotate: position === "left" ? 60 : -60,
-      opacity: 0,
-    }}
-    animate={{ 
-      rotate: position === "left" ? [60, -5, 60] : [-60, 5, -60],
-      opacity: [0.4, 0.9, 0.4],
-    }}
-    transition={{ 
-      rotate: {
-        duration: position === "right" ? (12 + delay) / 1.25 : (12 + delay),
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-      opacity: {
-        duration: 5,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }
-    }}
-    style={{ 
-      originX: "50%",
-      originY: "100%",
-    }}
-    className={`absolute -bottom-10 ${position === "left" ? "left-0 -translate-x-1/2" : "right-0 translate-x-1/2"} w-[150vmax] h-[150vmax] pointer-events-none z-[1] mix-blend-screen`}
-  >
-    <div 
-      style={{
-        background: `conic-gradient(
-          from -5deg 
-          at 50% 100%, 
-          transparent 0deg, 
-          rgba(255, 215, 0, 0.1) 2deg, 
-          rgba(255, 255, 255, 0.9) 5deg, 
-          rgba(255, 215, 0, 0.1) 8deg, 
-          transparent 10deg
-        )`,
-        filter: "blur(20px)",
+const Spotlight = ({ position, delay = 0, tier }: { position: "left" | "right"; delay?: number; tier: number }) => {
+  if (tier === 1) return null;
+
+  const isLeft = position === "left";
+  const animationClass = tier === 3 ? (isLeft ? "animate-spotlight-left" : "animate-spotlight-right") : "";
+  const staticTransform = isLeft ? "rotate(-10deg) translate3d(0,0,0)" : "rotate(10deg) translate3d(0,0,0)";
+
+  return (
+    <div
+      data-testid="hero-spotlight"
+      style={{ 
+        transformOrigin: "50% 100%",
+        transform: staticTransform,
+        opacity: 0.4,
+        animationDelay: tier === 3 ? `${delay}s` : undefined
       }}
-      className="w-full h-full"
-    />
-  </motion.div>
-);
+      className={`absolute -bottom-10 ${isLeft ? "left-0 -translate-x-1/2" : "right-0 translate-x-1/2"} w-[150vmax] h-[150vmax] pointer-events-none z-[1] mix-blend-screen ${animationClass}`}
+    >
+      <div 
+        style={{
+          background: `conic-gradient(
+            from -5deg 
+            at 50% 100%, 
+            transparent 0deg, 
+            rgba(255, 215, 0, 0.1) 2deg, 
+            rgba(255, 255, 255, 0.9) 5deg, 
+            rgba(255, 215, 0, 0.1) 8deg, 
+            transparent 10deg
+          )`,
+          filter: "blur(20px)",
+        }}
+        className="w-full h-full"
+      />
+    </div>
+  );
+};
 
 export function Hero() {
   const { openModal } = useLead();
+  const { tier } = usePerformanceTier();
   const whatsappUrl = "https://wa.me/554198019902?text=Ol%C3%A1%2C+vi+o+site+e+gostaria+de+solicitar+um+or%C3%A7amento+para+meu+neg%C3%B3cio.";
 
   const containerVariants: Variants = {
@@ -101,36 +93,20 @@ export function Hero() {
       <div className="absolute inset-0 bg-noise pointer-events-none z-0" />
 
       {/* Skywalker Spotlights */}
-      <Spotlight position="left" delay={2} />
-      <Spotlight position="right" delay={5} />
+      <Spotlight position="left" delay={2} tier={tier} />
+      <Spotlight position="right" delay={5} tier={tier} />
 
       {/* Dynamic Ambient Glows */}
-      <motion.div
-        animate={{
-          x: [0, 50, -20, 0],
-          y: [0, -30, 40, 0],
-          scale: [1, 1.1, 0.9, 1],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-        className="absolute top-1/4 -right-20 w-96 h-96 bg-accent opacity-10 blur-[120px] rounded-full pointer-events-none"
-      />
-      <motion.div
-        animate={{
-          x: [0, -40, 60, 0],
-          y: [0, 50, -30, 0],
-          scale: [1, 0.9, 1.2, 1],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-        className="absolute -bottom-20 -left-20 w-[500px] h-[500px] bg-accent opacity-5 blur-[150px] rounded-full pointer-events-none"
-      />
+      {tier > 1 && (
+        <>
+          <div
+            className={`absolute top-1/4 -right-20 w-96 h-96 bg-accent opacity-10 blur-[120px] rounded-full pointer-events-none ${tier === 3 ? "animate-glow-1" : ""}`}
+          />
+          <div
+            className={`absolute -bottom-20 -left-20 w-[500px] h-[500px] bg-accent opacity-5 blur-[150px] rounded-full pointer-events-none ${tier === 3 ? "animate-glow-2" : ""}`}
+          />
+        </>
+      )}
 
       {/* Background Texture/Effect */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-halftone opacity-10 pointer-events-none mix-blend-overlay" />
