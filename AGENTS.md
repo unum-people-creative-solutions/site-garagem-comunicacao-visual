@@ -25,8 +25,8 @@ A Fase 5 exige a separação rígida de responsabilidades:
 - **Handoff**: "Código implementado. Testes passando. Handoff para o Agente Auditor."
 
 ### 3. Agente Auditor (Revisor)
-- **Objetivo**: Validar segurança (`security-best-practices`), convenções e cobertura.
-- **Handoff**: "Auditoria concluída. Task marcada como DONE."
+- **Objetivo**: Validar segurança (`security-best-practices`), convenções e cobertura. E garantir a **Atualização de Estado** no `STATE.md`.
+- **Handoff**: "Auditoria concluída. Arquivo STATE.md atualizado. Task marcada como DONE."
 
 ## 🛠️ Últimas Alterações e Decisões
 - **Performance & Aceleração de GPU**: O Hero agora desativa animações pesadas do Framer Motion em hardwares mais fracos através do hook `usePerformanceTier` (Graceful Degradation em 3 Tiers). Animações de loop infinito foram migradas para o `globals.css` nativo forçando renderização via GPU (`will-change: transform, opacity`).
@@ -37,7 +37,7 @@ A Fase 5 exige a separação rígida de responsabilidades:
 - **Services Sync**: Lista de serviços atualizada com base na referência (Fachadas, Wind Banners, Cavaletes, Plotagem, Banners, Papelaria). O design original da seção foi mantido para preservação da identidade visual do site.
 
 ## 🛡️ Regras e Harness
-Consulte estritamente o arquivo `.specs/RULES.md` para restrições técnicas e comportamentais inquebráveis.
+Consulte estritamente o arquivo `docs/site-garagem-comunicacao-visual/spec/RULES.md` para restrições técnicas e comportamentais inquebráveis.
 
 ## 📝 Comandos e Contexto Local
 Next.js 14, Framer Motion.
